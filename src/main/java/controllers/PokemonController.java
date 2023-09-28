@@ -21,6 +21,8 @@ public class PokemonController {
     public PokemonController(){
         cargarPokedex();
         procesarStreams();
+        escribirCsv();
+        leerCsv();
     }
     public static PokemonController getInstance(){
         if(instance == null){
@@ -171,12 +173,11 @@ public class PokemonController {
             }
         }
 
-
-
     };
 
-    public void escribirCsv(String ruta){
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(ruta))){
+    public void escribirCsv(){
+        String csvRuta = Paths.get("").toAbsolutePath() + File.separator + "data" + File.separator + "datos.csv";
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(csvRuta))){
             bw.write("ID,Numero,Nombre,Altura,Peso");
             bw.newLine();
             pokedex.pokemon.stream()
@@ -199,9 +200,11 @@ public class PokemonController {
         }
     }
 
-    public void leerCsv(String ruta){
+    public void leerCsv(){
+
         try {
-            List<String> lineas = Files.lines(Paths.get(ruta))
+            String csvRuta = Paths.get("").toAbsolutePath() + File.separator + "data" + File.separator + "datos.csv";
+            List<String> lineas = Files.lines(Paths.get(csvRuta))
                     .skip(1)
                     .collect(Collectors.toList());
 
