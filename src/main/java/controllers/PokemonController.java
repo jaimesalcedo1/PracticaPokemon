@@ -6,19 +6,19 @@ import com.google.gson.reflect.TypeToken;
 import models.Pokedex;
 import models.Pokemon;
 
-import java.io.File;
-import java.io.Reader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
 public class PokemonController {
     private static PokemonController instance;
     private Pokedex pokedex;
-    private PokemonController(){
+    public PokemonController(){
         cargarPokedex();
         procesarStreams();
     }
@@ -174,4 +174,54 @@ public class PokemonController {
 
 
     };
+
+    public void escribirCsv(String ruta){
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(ruta))){
+            bw.write("ID,Numero,Nombre,Altura,Peso");
+            bw.newLine();
+            pokedex.pokemon.stream()
+                    .map(pokemon -> String.format("%d,%s,%s,%s,%s",
+                            pokemon.getId(),
+                            pokemon.getNum(),
+                            pokemon.getName(),
+                            pokemon.getHeight(),
+                            pokemon.getWeight()))
+                    .forEach(line -> {
+                        try {
+                            bw.write(line);
+                            bw.newLine();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void leerCsv(String ruta){
+        try {
+            List<String> lineas = Files.lines(Paths.get(ruta))
+                    .skip(1)
+                    .collect(Collectors.toList());
+
+            lineas.stream().forEach(line -> {
+                String[] campos = line.split(",");
+                int id = Integer.parseInt(campos[0]);
+                String num = campos[1];
+                String nombre = campos[2];
+                String altura = campos[3];
+                String peso = campos[4];
+
+                System.out.println("ID: " + id);
+                System.out.println("Numero: " + num);
+                System.out.println("Nombre: " + nombre);
+                System.out.println("Altura: " + altura);
+                System.out.println("Peso: " + peso);
+                System.out.println();
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
