@@ -1,2 +1,2 @@
-rootProject.name = "PokemonJSON"
+rootProject.name = "PracticaPokemon"
 
