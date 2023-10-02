@@ -16,10 +16,12 @@ import java.util.List;
 import java.util.Optional;
 
 
-/*
-* esta clase implementa la interfaz PokemonRepository que contiene todos los métodos
-* para realizar un CRUD en una base de datos.
-* */
+/**
+ *
+ * esta clase implementa la interfaz PokemonRepository que contiene todos los métodos
+ * para realizar un CRUD en una base de datos.
+ * @see PokemonRepository
+ * */
 public class PokemonRepositoryImpl implements PokemonRepository{
     private static PokemonRepositoryImpl instance;
     private final Logger logger = LoggerFactory.getLogger(PokemonRepositoryImpl.class);
@@ -30,6 +32,7 @@ public class PokemonRepositoryImpl implements PokemonRepository{
         this.dbm = dbm;
     }
 
+    //singleton
     public static PokemonRepositoryImpl getInstance(DatabaseManager dbm){
         if(instance == null){
             instance = new PokemonRepositoryImpl(dbm);
@@ -37,7 +40,7 @@ public class PokemonRepositoryImpl implements PokemonRepository{
         return instance;
     }
 
-    /*
+    /**
     *
     * Este método lee el csv datos.csv y transforma los datos a filas de una
     * tabla POKEMON dentro de la base de datos mediante una sentencia SQL
@@ -70,7 +73,6 @@ public class PokemonRepositoryImpl implements PokemonRepository{
                 pstm.setString(5, peso);
                 pstm.addBatch();
             }
-            br.close();
             pstm.executeBatch();
             connection.close();
 

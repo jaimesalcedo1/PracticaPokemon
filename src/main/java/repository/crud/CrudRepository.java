@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-/*
+/**
 * interfaz CrudRepository que contiene los metodos básicos para el CRUD que implementará
 * la clase PokemonRepository
 * */
