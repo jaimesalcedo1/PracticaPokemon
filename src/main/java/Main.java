@@ -4,11 +4,13 @@ import repository.pokemon.PokemonRepositoryImpl;
 
 import java.sql.SQLException;
 
-/*
-* clase main que instancia el controlador para filtrar los datos y exportar a csv
-* para posteriormente trabajar en una base de datos con el manejador de la base de
-* datos
-* */
+/**
+ * @author Jaime Salcedo
+ * @author Raúl Rodríguez
+ * clase main que instancia el controlador para filtrar los datos y exportar a csv
+ * para posteriormente trabajar en una base de datos con el manejador de la base de
+ * datos
+ * */
 public class Main {
     public static void main(String[] args) throws SQLException {
 

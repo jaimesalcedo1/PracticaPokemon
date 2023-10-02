@@ -12,6 +12,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * clase DatabaseManager que gestiona la iniciación de la base de datos así como
+ * gestionar sus conexiones
+ * @author Jaime Salcedo Vallejo
+ * */
 public class DatabaseManager implements AutoCloseable{
 
     private static DatabaseManager instance;
@@ -26,6 +31,10 @@ public class DatabaseManager implements AutoCloseable{
     private String databaseInitScript = "init.sql";
     private Connection connection;
 
+    /*
+    *
+    * constructor que carga los metodos para conectar a la base de datos
+    * */
     private DatabaseManager(){
 
         loadProperties();
@@ -41,6 +50,7 @@ public class DatabaseManager implements AutoCloseable{
         }
     }
 
+    //singleton
     public static synchronized DatabaseManager getInstance() {
         if (instance == null) {
             instance = new DatabaseManager();
@@ -48,6 +58,11 @@ public class DatabaseManager implements AutoCloseable{
         return instance;
     }
 
+    /*
+    *
+    * metodo que lee el archivo .properties en resources y actualiza la información de
+    * la base de datos
+    * */
     public void loadProperties(){
         logger.debug("Cargando fichero de la configuración para la base de datos");
         try {
@@ -71,6 +86,10 @@ public class DatabaseManager implements AutoCloseable{
 
     }
 
+    /**
+     *
+     * este método abre la conexión con la base de datos
+     */
     private void openConnection() throws SQLException {
         logger.debug("Conectando con la base de datos en " + connectionUrl);
         connection = DriverManager.getConnection(connectionUrl);
@@ -82,6 +101,11 @@ public class DatabaseManager implements AutoCloseable{
         connection.close();
     }
 
+    /**
+     *
+     * este método inserta las tablas iniciales en la base de datos a partir de un
+     * script
+     * */
     private void initTables(){
         try {
             executeScript(databaseInitScript, true);
@@ -91,6 +115,11 @@ public class DatabaseManager implements AutoCloseable{
         }
     }
 
+    /**
+     *
+     * este método ejecuta el script que se encuentra en el archivo init.sql que
+     * contiene sentencias SQL
+     * */
     public void executeScript(String scriptSQLFile, boolean logWriter) throws FileNotFoundException{
         ScriptRunner sr = new ScriptRunner(connection);
         var archivo = ClassLoader.getSystemResource(scriptSQLFile).getFile();
@@ -100,6 +129,11 @@ public class DatabaseManager implements AutoCloseable{
         sr.runScript(reader);
     }
 
+    /**
+     *
+     * método que inicia la conexión con la base de datos
+     * @return Connection
+     * */
     public Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             try {

@@ -7,8 +7,9 @@ import repository.crud.CrudRepository;
 import java.sql.SQLException;
 import java.util.List;
 
-/*
-* Interfaz que extiende de la interfaz CrudRepository y añade el método propio
+/**
+* @see CrudRepository
+ * Interfaz que extiende de la interfaz CrudRepository y añade el método propio
 * findByNombre
 * */
 public interface PokemonRepository extends CrudRepository<Pokemon, Long, PokemonException> {

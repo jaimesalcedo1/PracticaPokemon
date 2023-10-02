@@ -15,16 +15,25 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
+/**
+ * clase controlador que contiene los metodos para lectura de json, filtrado de datos
+ * y exportación a CSV
+ * @author Jaime Salcedo Vallejo
+ * @author Raúl Rodríguez
+ * */
 public class PokemonController {
     private static PokemonController instance;
     private Pokedex pokedex;
+
+    //constructor que inicia el resto de métodos del controlador
     private PokemonController(){
         cargarPokedex();
         procesarStreams();
         escribirCsv();
         leerCsv();
-        //escribirCSVdb();
     }
+
+    //singleton
     public static PokemonController getInstance(){
         if(instance == null){
             instance = new PokemonController();
@@ -32,6 +41,11 @@ public class PokemonController {
         return instance;
     }
 
+    /**
+    *
+    * metodo que, a partir de un archivo pokemon.json, transforma cada elemento json
+    * en objetos pokemon dentro de un ArrayList pokedex
+    * */
     private void cargarPokedex() {
         Path currentRelativePath = Paths.get("");
         String ruta = currentRelativePath.toAbsolutePath().toString();
@@ -40,7 +54,6 @@ public class PokemonController {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         try(Reader reader = Files.newBufferedReader(Paths.get(pokemonFile))) {
-
             this.pokedex = gson.fromJson(reader, new TypeToken<Pokedex>(){}.getType());
             System.out.println("Pokedex cargada, hay: "+ pokedex.pokemon.size());
         } catch (Exception e) {
@@ -49,6 +62,11 @@ public class PokemonController {
         }
     }
 
+    /**
+    *
+    * metodo que realiza varios filtrados de la lista de pokemons haciendo uso de la
+    * api Stream
+    * */
     public void procesarStreams(){
 
         System.out.println("\n--- LISTA DE POKEMONS ---");
@@ -176,6 +194,9 @@ public class PokemonController {
 
     };
 
+    /**
+    * metodo que escribe un archivo CSV en la carpeta data a partir de objetos Pokemon
+    * */
     public void escribirCsv(){
         String csvRuta = Paths.get("").toAbsolutePath() + File.separator + "data" + File.separator + "datos.csv";
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(csvRuta))){
@@ -200,6 +221,10 @@ public class PokemonController {
         }
     }
 
+    /**
+    *
+    * metodo que muestra por pantalla el archivo csv datos.csv con un formato determinado
+    * */
     public void leerCsv(){
 
         try {
@@ -227,41 +252,4 @@ public class PokemonController {
             e.printStackTrace();
         }
     }
-
-    /*public void escribirCSVdb(){
-        String csvRuta = Paths.get("").toAbsolutePath() + File.separator + "data" + File.separator + "pokemon.csv";
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(csvRuta))){
-            bw.newLine();
-            pokedex.pokemon.stream()
-                    .map(pokemon -> String.format("%d,%s,%s,%s,%s",
-                            pokemon.getImg(),
-                            pokemon.getEgg(),
-                            pokemon.getCandy(),
-                            pokemon.getNum(),
-                            pokemon.getWeight(),
-                            pokemon.getType(),
-                            pokemon.getWeaknesses(),
-                            pokemon.getName(),
-                            pokemon.getAvg_spawns(),
-                            pokemon.getMultipliers(),
-                            pokemon.getId(),
-                            pokemon.getSpawn_time(),
-                            pokemon.getHeight(),
-                            pokemon.getSpawn_chance(),
-                            pokemon.getPrev_evolution(),
-                            pokemon.getCandy_count(),
-                            pokemon.getNext_evolution()
-                            ))
-                    .forEach(line -> {
-                        try {
-                            bw.write(line);
-                            bw.newLine();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }*/
 }
