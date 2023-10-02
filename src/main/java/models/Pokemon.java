@@ -1,10 +1,16 @@
 package models;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.ArrayList;
 
+/*
+* Clase POJO Pokemon
+* */
 @Data
+@Builder
 public class Pokemon {
 	private String img;
 	private String egg;
@@ -23,74 +29,6 @@ public class Pokemon {
 	private ArrayList<PrevEvolution> prev_evolution;
 	private int candy_count;
 	private ArrayList<NextEvolution> next_evolution;
-
-	public String getImg() {
-		return img;
-	}
-
-	public String getEgg() {
-		return egg;
-	}
-
-	public String getCandy() {
-		return candy;
-	}
-
-	public String getNum() {
-		return num;
-	}
-
-	public String getWeight() {
-		return weight;
-	}
-
-	public ArrayList<String> getType() {
-		return type;
-	}
-
-	public ArrayList<String> getWeaknesses() {
-		return weaknesses;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public double getAvg_spawns() {
-		return avg_spawns;
-	}
-
-	public ArrayList<Object> getMultipliers() {
-		return multipliers;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public String getSpawn_time() {
-		return spawn_time;
-	}
-
-	public String getHeight() {
-		return height;
-	}
-
-	public Object getSpawn_chance() {
-		return spawn_chance;
-	}
-
-	public ArrayList<PrevEvolution> getPrev_evolution() {
-		return prev_evolution;
-	}
-
-	public int getCandy_count() {
-		return candy_count;
-	}
-
-	public ArrayList<NextEvolution> getNext_evolution() {
-		return next_evolution;
-	}
 
 	@Override
 	public String toString(){

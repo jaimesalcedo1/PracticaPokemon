@@ -6,12 +6,12 @@ import com.google.gson.reflect.TypeToken;
 import models.Pokedex;
 import models.Pokemon;
 
-import java.io.File;
-import java.io.Reader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
@@ -21,6 +21,9 @@ public class PokemonController {
     private PokemonController(){
         cargarPokedex();
         procesarStreams();
+        escribirCsv();
+        leerCsv();
+        //escribirCSVdb();
     }
     public static PokemonController getInstance(){
         if(instance == null){
@@ -171,7 +174,94 @@ public class PokemonController {
             }
         }
 
-
-
     };
+
+    public void escribirCsv(){
+        String csvRuta = Paths.get("").toAbsolutePath() + File.separator + "data" + File.separator + "datos.csv";
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(csvRuta))){
+            bw.newLine();
+            pokedex.pokemon.stream()
+                    .map(pokemon -> String.format("%d,%s,%s,%s,%s",
+                            pokemon.getId(),
+                            pokemon.getNum(),
+                            pokemon.getName(),
+                            pokemon.getHeight(),
+                            pokemon.getWeight()))
+                    .forEach(line -> {
+                        try {
+                            bw.write(line);
+                            bw.newLine();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void leerCsv(){
+
+        try {
+            String csvRuta = Paths.get("").toAbsolutePath() + File.separator + "data" + File.separator + "datos.csv";
+            List<String> lineas = Files.lines(Paths.get(csvRuta))
+                    .skip(1)
+                    .collect(Collectors.toList());
+
+            lineas.stream().forEach(line -> {
+                String[] campos = line.split(",");
+                int id = Integer.parseInt(campos[0]);
+                String num = campos[1];
+                String nombre = campos[2];
+                String altura = campos[3];
+                String peso = campos[4];
+
+                System.out.println("ID: " + id);
+                System.out.println("Numero: " + num);
+                System.out.println("Nombre: " + nombre);
+                System.out.println("Altura: " + altura);
+                System.out.println("Peso: " + peso);
+                System.out.println();
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*public void escribirCSVdb(){
+        String csvRuta = Paths.get("").toAbsolutePath() + File.separator + "data" + File.separator + "pokemon.csv";
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(csvRuta))){
+            bw.newLine();
+            pokedex.pokemon.stream()
+                    .map(pokemon -> String.format("%d,%s,%s,%s,%s",
+                            pokemon.getImg(),
+                            pokemon.getEgg(),
+                            pokemon.getCandy(),
+                            pokemon.getNum(),
+                            pokemon.getWeight(),
+                            pokemon.getType(),
+                            pokemon.getWeaknesses(),
+                            pokemon.getName(),
+                            pokemon.getAvg_spawns(),
+                            pokemon.getMultipliers(),
+                            pokemon.getId(),
+                            pokemon.getSpawn_time(),
+                            pokemon.getHeight(),
+                            pokemon.getSpawn_chance(),
+                            pokemon.getPrev_evolution(),
+                            pokemon.getCandy_count(),
+                            pokemon.getNext_evolution()
+                            ))
+                    .forEach(line -> {
+                        try {
+                            bw.write(line);
+                            bw.newLine();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }*/
 }

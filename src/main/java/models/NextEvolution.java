@@ -2,6 +2,9 @@ package models;
 
 import lombok.Data;
 
+/*
+* Clase POJO NextEvolution
+* */
 @Data
 public class NextEvolution {
 	private String num;
